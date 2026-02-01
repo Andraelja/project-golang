@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	// "errors" // Tidak digunakan, dikomentari.
-	"task-session-1/models"
+	"project-golang/models"
 )
 
 // ProductRepository adalah struct yang menyimpan koneksi database untuk operasi produk.

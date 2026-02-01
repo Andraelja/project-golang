@@ -1,4 +1,4 @@
-module task-session-1
+module project-golang
 
 go 1.24.4
 

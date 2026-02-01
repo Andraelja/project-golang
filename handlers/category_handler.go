@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"task-session-1/models"
-	"task-session-1/services"
+	"project-golang/models"
+	"project-golang/services"
 )
 
 // CategoryHandler adalah struct yang menangani request HTTP untuk kategori.

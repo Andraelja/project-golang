@@ -3,7 +3,7 @@ package repositories
 import (
 	"database/sql"
 	"errors"
-	"task-session-1/models"
+	"project-golang/models"
 )
 
 // CategoryRepository adalah struct yang menyimpan koneksi database untuk operasi kategori.

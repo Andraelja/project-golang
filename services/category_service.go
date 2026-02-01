@@ -1,8 +1,8 @@
 package services
 
 import (
-	"task-session-1/models"
-	"task-session-1/repositories"
+	"project-golang/models"
+	"project-golang/repositories"
 )
 
 // CategoryService adalah struct yang menyimpan dependency untuk operasi kategori.

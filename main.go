@@ -8,10 +8,10 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 
-	"task-session-1/database"
-	"task-session-1/handlers"
-	"task-session-1/repositories"
-	"task-session-1/services"
+	"project-golang/database"
+	"project-golang/handlers"
+	"project-golang/repositories"
+	"project-golang/services"
 )
 
 // Config adalah struct yang menyimpan konfigurasi aplikasi.
@@ -74,15 +74,20 @@ func main() {
 	productService := services.NewProductService(productRepo, categoryRepo)
 	productHandler := handlers.NewProductHandler(productService)
 
-	// Mendaftarkan handler untuk endpoint HTTP.
-	// /api/category untuk operasi umum kategori (GET semua, POST buat baru).
+	roleRepo := repositories.NewRoleRepository(db)
+	roleService := services.NewRoleService(roleRepo)
+	roleHandler := handlers.NewRoleHandler(*roleService)
+
+	// category
 	http.HandleFunc("/api/category", categoryHandler.HandleCategory)
-	// /api/category/ untuk operasi berdasarkan ID (GET, PUT, DELETE).
 	http.HandleFunc("/api/category/", categoryHandler.HandleCategoryByID)
-	// /api/product untuk operasi produk (GET semua, POST buat baru).
+
+	// product
 	http.HandleFunc("/api/product", productHandler.HandleProduct)
-	// /api/product/ untuk operasi berdasarkan ID (GET, PUT, DELETE).
 	http.HandleFunc("/api/product/", productHandler.HandleProductByID)
+
+	// role
+	http.HandleFunc("/api/role", roleHandler.HandleRole)
 
 	// Menjalankan server HTTP di alamat yang ditentukan.
 	// Jika gagal, aplikasi akan berhenti dengan pesan error.

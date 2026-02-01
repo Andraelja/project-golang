@@ -1,4 +1,4 @@
-# Penjelasan Detail Kode Proyek Task-Session-1
+# Penjelasan Detail Kode Proyek project-golang
 
 Proyek ini adalah aplikasi REST API sederhana yang dibangun menggunakan bahasa pemrograman Go (Golang). Aplikasi ini mengelola data kategori (category) dan produk (product) dengan menggunakan database PostgreSQL. Struktur proyek mengikuti pola arsitektur yang umum digunakan dalam pengembangan aplikasi web, yaitu dengan pemisahan layer: **Models**, **Repositories**, **Services**, **Handlers**, dan **Database**.
 
@@ -7,11 +7,11 @@ Proyek ini adalah aplikasi REST API sederhana yang dibangun menggunakan bahasa p
 Berikut adalah struktur direktori dan file dalam proyek ini:
 
 ```
-task-session-1/
+project-golang/
 ├── go.mod                 # File modul Go yang mendefinisikan dependensi
 ├── go.sum                 # File checksum untuk dependensi
 ├── main.go                # File utama aplikasi (entry point)
-├── task-session-1.exe     # File executable hasil kompilasi (untuk Windows)
+├── project-golang.exe     # File executable hasil kompilasi (untuk Windows)
 ├── database/
 │   └── database.go        # Konfigurasi dan inisialisasi koneksi database
 ├── handlers/

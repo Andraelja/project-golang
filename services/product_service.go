@@ -2,8 +2,8 @@ package services
 
 import (
 	"errors"
-	"task-session-1/models"
-	"task-session-1/repositories"
+	"project-golang/models"
+	"project-golang/repositories"
 )
 
 // ProductService adalah struct yang menyimpan dependency untuk operasi produk.
