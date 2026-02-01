@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"project-golang/models"
 	"project-golang/services"
+	"strconv"
+	"strings"
 )
 
 type RoleHandler struct {
@@ -21,6 +23,19 @@ func (h *RoleHandler) HandleRole(w http.ResponseWriter, r *http.Request) {
 		h.GetAll(w, r)
 	case http.MethodPost:
 		h.Create(w, r)
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func (h *RoleHandler) HandleRoleByID(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		h.GetByID(w, r)
+	// case http.MethodPut:
+	// 	h.Update(w, r)
+	// case http.MethodDelete:
+	// 	h.Delete(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -53,5 +68,23 @@ func (h *RoleHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(role)
+}
+
+func (h *RoleHandler) GetByID(w http.ResponseWriter, r *http.Request) {
+	idStr := strings.TrimPrefix(r.URL.Path, "/api/role/")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid role ID", http.StatusBadRequest)
+		return
+	}
+
+	role, err := h.services.GetByID(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(role)
 }

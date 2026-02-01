@@ -88,9 +88,8 @@ func main() {
 
 	// role
 	http.HandleFunc("/api/role", roleHandler.HandleRole)
+	http.HandleFunc("/api/role/", roleHandler.HandleRoleByID)
 
-	// Menjalankan server HTTP di alamat yang ditentukan.
-	// Jika gagal, aplikasi akan berhenti dengan pesan error.
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal("gagal running server:", err)
 	}

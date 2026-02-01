@@ -47,3 +47,22 @@ func (repo *RoleRepository) Create(role *models.Role) error {
 	err := repo.db.QueryRow(query, role.Name).Scan(&role.ID)
 	return err
 }
+
+func (repo *RoleRepository) GetByID(id int) (*models.Role, error) {
+	query := `
+			SELECT 
+			id, 
+			name FROM role WHERE id = $1`
+	var p models.Role
+	err := repo.db.QueryRow(query, id).Scan(&p.ID, &p.Name)
+
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &p, nil
+}
