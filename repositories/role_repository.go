@@ -39,3 +39,11 @@ func (repo *RoleRepository) GetAll() ([]models.Role, error) {
 
 	return role, nil
 }
+
+func (repo *RoleRepository) Create(role *models.Role) error {
+	query := `
+			INSERT INTO role 
+			(name) VALUES ($1) RETURNING id`
+	err := repo.db.QueryRow(query, role.Name).Scan(&role.ID)
+	return err
+}

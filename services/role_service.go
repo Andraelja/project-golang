@@ -26,3 +26,7 @@ func (s *RoleService) GetAll() ([]models.Role, error) {
 
 	return role, nil
 }
+
+func (s *RoleService) Create(data *models.Role) error {
+	return s.repo.Create(data)
+}
