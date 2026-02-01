@@ -1,6 +1,7 @@
 package services
 
 import (
+	"errors"
 	"project-golang/models"
 	"project-golang/repositories"
 )
@@ -14,5 +15,14 @@ func NewRoleService(repo *repositories.RoleRepository) *RoleService {
 }
 
 func (s *RoleService) GetAll() ([]models.Role, error) {
-	return s.repo.GetAll()
+	role, err := s.repo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(role) < 1 {
+		return nil, errors.New("Data is still empty, please add data!")
+	}
+
+	return role, nil
 }
