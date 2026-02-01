@@ -32,8 +32,8 @@ func (h *RoleHandler) HandleRoleByID(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		h.GetByID(w, r)
-	// case http.MethodPut:
-	// 	h.Update(w, r)
+	case http.MethodPut:
+		h.Update(w, r)
 	// case http.MethodDelete:
 	// 	h.Delete(w, r)
 	default:
@@ -82,6 +82,32 @@ func (h *RoleHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	role, err := h.services.GetByID(id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(role)
+}
+
+func (h *RoleHandler) Update(w http.ResponseWriter, r *http.Request) {
+	idStr := strings.TrimPrefix(r.URL.Path, "/api/role/")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid role ID", http.StatusBadRequest)
+		return
+	}
+
+	var role models.Role
+	err = json.NewDecoder(r.Body).Decode(&role)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	role.ID = id
+	err = h.services.Update(&role)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 

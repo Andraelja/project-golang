@@ -66,3 +66,22 @@ func (repo *RoleRepository) GetByID(id int) (*models.Role, error) {
 
 	return &p, nil
 }
+
+func (repo *RoleRepository) Update(role *models.Role) (int64, error) {
+	query := `
+		UPDATE role 
+		SET name = $1 
+		WHERE id = $2`
+
+	result, err := repo.db.Exec(query, role.Name, role.ID)
+	if err != nil {
+		return 0, err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
+
+	return rows, nil
+}

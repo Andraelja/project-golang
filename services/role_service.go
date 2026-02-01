@@ -20,10 +20,6 @@ func (s *RoleService) GetAll() ([]models.Role, error) {
 		return nil, err
 	}
 
-	if len(role) < 1 {
-		return nil, errors.New("Data is still empty, please add data!")
-	}
-
 	return role, nil
 }
 
@@ -40,6 +36,19 @@ func (s *RoleService) GetByID(id int) (*models.Role, error) {
 	if role == nil {
 		return nil, errors.New("Data not found!")
 	}
-	
+
 	return role, nil
+}
+
+func (s *RoleService) Update(role *models.Role) error {
+	rows, err := s.repo.Update(role)
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return errors.New("Data not found!")
+	}
+
+	return nil
 }
