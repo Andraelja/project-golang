@@ -52,3 +52,7 @@ func (s *RoleService) Update(role *models.Role) error {
 
 	return nil
 }
+
+func (s *RoleService) Delete(id int) error {
+	return s.repo.Delete(id)
+}

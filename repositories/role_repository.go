@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"errors"
 	"project-golang/models"
 )
 
@@ -84,4 +85,22 @@ func (repo *RoleRepository) Update(role *models.Role) (int64, error) {
 	}
 
 	return rows, nil
+}
+
+func (repo *RoleRepository) Delete(id int) error {
+	query := "DELETE FROM role WHERE id = $1"
+	result, err := repo.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return errors.New("Data not found!")
+	}
+
+	return err
 }

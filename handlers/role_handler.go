@@ -34,8 +34,8 @@ func (h *RoleHandler) HandleRoleByID(w http.ResponseWriter, r *http.Request) {
 		h.GetByID(w, r)
 	case http.MethodPut:
 		h.Update(w, r)
-	// case http.MethodDelete:
-	// 	h.Delete(w, r)
+	case http.MethodDelete:
+		h.Delete(w, r)
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
@@ -113,4 +113,24 @@ func (h *RoleHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(role)
+}
+
+func (h *RoleHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	idStr := strings.TrimPrefix(r.URL.Path, "/api/role/")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Invalid role ID", http.StatusBadRequest)
+		return
+	}
+
+	err = h.services.Delete(id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "role deleted successfully",
+	})
 }
