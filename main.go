@@ -96,7 +96,7 @@ func main() {
 
 	// user
 	http.HandleFunc("/api/user", userHandler.HandleUser)
-	// http.HandleFunc("/api/user/", userHandle.HandleUserByID)
+	http.HandleFunc("/api/user/", userHandler.HandleUserByID)
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal("gagal running server:", err)
