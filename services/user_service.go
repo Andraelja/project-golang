@@ -75,7 +75,7 @@ func (s *UserService) Update(user *models.User) error {
 	}
 
 	role, err := s.roleRepo.GetByID(user.RoleID)
-	
+
 	hashedPassword, err := bcrypt.GenerateFromPassword(
 		[]byte(user.Password),
 		bcrypt.DefaultCost,
@@ -91,4 +91,17 @@ func (s *UserService) Update(user *models.User) error {
 	}
 
 	return s.userRepo.Update(user)
+}
+
+func (s *UserService) Delete(id int) error {
+	user, err := s.userRepo.GetByID(id)
+	if err != nil {
+		return err
+	}
+
+	if user == nil {
+		return errors.New("user not found")
+	}
+
+	return s.userRepo.Delete(id)
 }

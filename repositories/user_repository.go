@@ -122,3 +122,24 @@ func (repo *UserRepository) Update(user *models.User) error {
 
 	return nil
 }
+
+func (repo *UserRepository) Delete(id int) error {
+	query := `
+			DELETE FROM "user" 
+			WHERE id=$1`
+	result, err := repo.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return errors.New("user not found!")
+	}
+
+	return err
+}
