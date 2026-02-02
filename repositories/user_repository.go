@@ -143,3 +143,32 @@ func (repo *UserRepository) Delete(id int) error {
 
 	return err
 }
+
+func (repo *UserRepository) GetByUsername(username string) (*models.User, error) {
+	query := `
+		SELECT
+			u.id,
+			u.username,
+			u.password,
+			u.role_id,
+			r.id,
+			r.name
+		FROM "user" u
+		JOIN role r ON r.id = u.role_id
+		WHERE u.username = $1`
+
+	var u models.User
+	var r models.Role
+	err := repo.db.QueryRow(query, username).
+		Scan(&u.ID, &u.Username, &u.Password, &u.RoleID, &r.ID, &r.Name)
+
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	u.Role = &r
+	return &u, nil
+}

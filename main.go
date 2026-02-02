@@ -10,6 +10,7 @@ import (
 
 	"project-golang/database"
 	"project-golang/handlers"
+	"project-golang/middlewares"
 	"project-golang/repositories"
 	"project-golang/services"
 )
@@ -82,21 +83,21 @@ func main() {
 	userService := services.NewUserService(userRepo, roleRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
-	// category
-	http.HandleFunc("/api/category", categoryHandler.HandleCategory)
-	http.HandleFunc("/api/category/", categoryHandler.HandleCategoryByID)
+	authService := services.NewAuthService(userRepo)
+	authHandler := handlers.NewAuthHandler(authService)
 
-	// product
-	http.HandleFunc("/api/product", productHandler.HandleProduct)
-	http.HandleFunc("/api/product/", productHandler.HandleProductByID)
+	// auth
+	http.HandleFunc("/api/login", authHandler.Login)
 
-	// role
-	http.HandleFunc("/api/role", roleHandler.HandleRole)
-	http.HandleFunc("/api/role/", roleHandler.HandleRoleByID)
-
-	// user
-	http.HandleFunc("/api/user", userHandler.HandleUser)
-	http.HandleFunc("/api/user/", userHandler.HandleUserByID)
+	// Protected routes with JWT middleware
+	http.Handle("/api/category", middlewares.JWTAuth(http.HandlerFunc(categoryHandler.HandleCategory)))
+	http.Handle("/api/category/", middlewares.JWTAuth(http.HandlerFunc(categoryHandler.HandleCategoryByID)))
+	http.Handle("/api/product", middlewares.JWTAuth(http.HandlerFunc(productHandler.HandleProduct)))
+	http.Handle("/api/product/", middlewares.JWTAuth(http.HandlerFunc(productHandler.HandleProductByID)))
+	http.Handle("/api/role", middlewares.JWTAuth(http.HandlerFunc(roleHandler.HandleRole)))
+	http.Handle("/api/role/", middlewares.JWTAuth(http.HandlerFunc(roleHandler.HandleRoleByID)))
+	http.Handle("/api/user", middlewares.JWTAuth(http.HandlerFunc(userHandler.HandleUser)))
+	http.Handle("/api/user/", middlewares.JWTAuth(http.HandlerFunc(userHandler.HandleUserByID)))
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal("gagal running server:", err)
