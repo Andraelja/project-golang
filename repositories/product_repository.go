@@ -3,7 +3,6 @@ package repositories
 import (
 	"database/sql"
 	"errors"
-	// "errors" // Tidak digunakan, dikomentari.
 	"project-golang/models"
 )
 

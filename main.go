@@ -78,6 +78,10 @@ func main() {
 	roleService := services.NewRoleService(roleRepo)
 	roleHandler := handlers.NewRoleHandler(*roleService)
 
+	userRepo := repositories.NewUserRepository(db)
+	userService := services.NewUserService(userRepo, roleRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
 	// category
 	http.HandleFunc("/api/category", categoryHandler.HandleCategory)
 	http.HandleFunc("/api/category/", categoryHandler.HandleCategoryByID)
@@ -89,6 +93,10 @@ func main() {
 	// role
 	http.HandleFunc("/api/role", roleHandler.HandleRole)
 	http.HandleFunc("/api/role/", roleHandler.HandleRoleByID)
+
+	// user
+	http.HandleFunc("/api/user", userHandler.HandleUser)
+	// http.HandleFunc("/api/user/", userHandle.HandleUserByID)
 
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal("gagal running server:", err)
