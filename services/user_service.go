@@ -68,3 +68,27 @@ func (s *UserService) GetByID(id int) (*models.User, error) {
 
 	return user, nil
 }
+
+func (s *UserService) Update(user *models.User) error {
+	if user.RoleID == 0 {
+		return errors.New("Role cannot empty!")
+	}
+
+	role, err := s.roleRepo.GetByID(user.RoleID)
+	
+	hashedPassword, err := bcrypt.GenerateFromPassword(
+		[]byte(user.Password),
+		bcrypt.DefaultCost,
+	)
+	if err != nil {
+		return err
+	}
+
+	user.Password = string(hashedPassword)
+
+	if role == nil {
+		return errors.New("role not found!")
+	}
+
+	return s.userRepo.Update(user)
+}

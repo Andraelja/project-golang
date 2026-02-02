@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"database/sql"
+	"errors"
 	"project-golang/models"
 )
 
@@ -95,4 +96,29 @@ func (repo *UserRepository) GetByID(id int) (*models.User, error) {
 	u.Role = &r
 
 	return &u, nil
+}
+
+func (repo *UserRepository) Update(user *models.User) error {
+	query := `
+			UPDATE "user" SET
+			username=$1,
+			password=$2,
+			role_id=$3
+			WHERE id=$4`
+
+	result, err := repo.db.Exec(query, user.Username, user.Password, user.RoleID, user.ID)
+	if err != nil {
+		return err
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return errors.New("User not found!")
+	}
+
+	return nil
 }
